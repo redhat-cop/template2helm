@@ -34,15 +34,15 @@ var (
 
 			yamlFile, err := ioutil.ReadFile(filepath.Clean(tplPath))
 			if err != nil {
-				return fmt.Errorf("Couldn't load template: %v\n", err)
+				return fmt.Errorf("Couldn't load template: %v", err)
 			}
 
 			err = yaml.Unmarshal(yamlFile, &myTemplate)
 			checkErr(err, "Unable to marshal template")
 
-			// Convert myTemplate.Objects into individual files
+			// TODO: Convert myTemplate.Objects into individual files
 			var templates []*chart.File
-			// Convert myTemplate.Parameters into a yaml string map
+			// TODO: Convert myTemplate.Parameters into a yaml string map
 			var values map[string]interface{}
 
 			myChart := chart.Chart{
@@ -54,7 +54,14 @@ var (
 				Values:    values,
 			}
 
-			chartutil.SaveDir(&myChart, chartPath)
+			if myChart.Metadata.Name == "" {
+				ext := filepath.Ext(tplPath)
+				name := filepath.Base(string(tplPath))[0 : len(filepath.Base(string(tplPath)))-len(ext)]
+				myChart.Metadata.Name = name
+			}
+
+			err = chartutil.SaveDir(&myChart, chartPath)
+			checkErr(err, fmt.Sprintf("Failed to save chart %s", myChart.Metadata.Name))
 
 			return nil
 		},
