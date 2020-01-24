@@ -1,4 +1,4 @@
-module github.com/redhat-cop/template2helm/m
+module github.com/redhat-cop/template2helm
 
 go 1.13
 
