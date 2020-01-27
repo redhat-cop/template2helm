@@ -49,20 +49,20 @@ var (
 			err = json.Unmarshal(jsonB, &myTemplate)
 			checkErr(err, "Unable to marshal template")
 
-			//fmt.Println("Printing Template")
-			//fmt.Println(myTemplate)
-
-			// TODO: Convert myTemplate.Objects into individual files
+			// Convert myTemplate.Objects into individual files
 			var templates []*chart.File
-			err = objectToTemplate(myTemplate.Objects, &templates)
+			err = objectToTemplate(&myTemplate.Objects, &templates)
 			checkErr(err, "Failed object to template conversion")
 
 			// TODO: Convert myTemplate.Parameters into a yaml string map
-			var values map[string]interface{}
+			values := make(map[string]interface{})
+			err = paramsToValues(&myTemplate.Parameters, &values, &templates)
+			checkErr(err, "Failed parameter to value conversion")
 
 			myChart := chart.Chart{
 				Metadata: &chart.Metadata{
-					Name: myTemplate.ObjectMeta.Name,
+					Name:    myTemplate.ObjectMeta.Name,
+					Version: "v0.0.1",
 					// TODO: add description, labels, etc.
 				},
 				Templates: templates,
@@ -98,23 +98,66 @@ func checkErr(err error, msg string) {
 }
 
 // Convert the object list in the openshift template to a set of template files in the chart
-func objectToTemplate(objects []runtime.RawExtension, templates *[]*chart.File) error {
-	//fmt.Println(objects)
+func objectToTemplate(objects *[]runtime.RawExtension, templates *[]*chart.File) error {
+	o := *objects
 
-	for _, v := range objects {
+	for _, v := range o {
 		var k8sR unstructured.Unstructured
 		err := json.Unmarshal(v.Raw, &k8sR)
 		if err != nil {
 			return fmt.Errorf(fmt.Sprintf("Failed to unmarshal Raw resource\n%v\n", v.Raw) + err.Error())
 		}
-		name := strings.ToLower(k8sR.GetKind() + ".yaml")
+		name := "templates/" + strings.ToLower(k8sR.GetKind()+".yaml")
+
 		log.Printf("Creating a template for object %s", name)
+		data, err := yaml.JSONToYAML(v.Raw)
+		if err != nil {
+			return fmt.Errorf(fmt.Sprintf("Failed to marshal Raw resource back to YAML\n%v\n", v.Raw) + err.Error())
+		}
 		tf := chart.File{
 			Name: name,
-			Data: v.Raw,
+			Data: data,
 		}
 		*templates = append(*templates, &tf)
 	}
+
+	return nil
+}
+
+func paramsToValues(param *[]template.Parameter, values *map[string]interface{}, templates *[]*chart.File) error {
+
+	p := *param
+	t := *templates
+	v := *values
+
+	for _, pm := range p {
+		name := strings.ToLower(pm.Name)
+		log.Printf("Convert parameter %s to value .%s", pm.Name, name)
+
+		for i, tf := range t {
+			// Search and replace ${PARAM} with {{ .Values.param }}
+			raw := tf.Data
+			// Handle string format parameters
+			ns := strings.ReplaceAll(string(raw), fmt.Sprintf("${%s}", pm.Name), fmt.Sprintf("{{ .Values.%s }}", name))
+			// TODO Handle binary formatted data differently
+			ns = strings.ReplaceAll(ns, fmt.Sprintf("${{%s}}", pm.Name), fmt.Sprintf("{{ .Values.%s }}", name))
+			ntf := chart.File{
+				Name: tf.Name,
+				Data: []byte(ns),
+			}
+
+			t[i] = &ntf
+		}
+
+		if pm.Value != "" {
+			v[name] = pm.Value
+		} else {
+			v[name] = "# TODO: must define a default value for ." + name
+		}
+	}
+
+	*templates = t
+	*values = v
 
 	return nil
 }
