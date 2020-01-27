@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 
 	template "github.com/openshift/api/template/v1"
 	"github.com/spf13/cobra"
@@ -106,9 +107,10 @@ func objectToTemplate(objects []runtime.RawExtension, templates *[]*chart.File) 
 		if err != nil {
 			return fmt.Errorf(fmt.Sprintf("Failed to unmarshal Raw resource\n%v\n", v.Raw) + err.Error())
 		}
-		log.Printf("Creating a template for object %s", k8sR.GetName())
+		name := strings.ToLower(k8sR.GetKind() + ".yaml")
+		log.Printf("Creating a template for object %s", name)
 		tf := chart.File{
-			Name: k8sR.GetKind() + k8sR.GetName(),
+			Name: name,
 			Data: v.Raw,
 		}
 		*templates = append(*templates, &tf)
