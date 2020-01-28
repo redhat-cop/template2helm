@@ -4,14 +4,14 @@ Template2Helm is a go utility that converts OpenShift templates into Helm charts
 
 ## Usage
 
-Install deps
+Install from source
 
 ```
-go mod vendor
+make install
 ```
 
 Run like so:
 
 ```
-go run main.go convert -template ~/src/openshift-templates/jobs/slack-notify-job-template.yml -chart ~/tmp/charts
+template2helm convert --template ~/src/openshift-templates/jobs/slack-notify-job-template.yml --chart ~/tmp/charts
 ```
