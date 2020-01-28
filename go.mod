@@ -6,7 +6,7 @@ replace github.com/docker/docker => github.com/moby/moby v0.7.3-0.20190826074503
 
 require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
-	github.com/labstack/gommon v0.3.0
+	github.com/labstack/gommon v0.3.0 // indirect
 	github.com/neelance/parallel v0.0.0-20160708114440-4de9ce63d14c // indirect
 	github.com/openshift/api v0.0.0-20200123162640-f263157f58d3
 	github.com/opentracing/basictracer-go v1.0.0 // indirect
@@ -22,7 +22,7 @@ require (
 	golang.org/x/net v0.0.0-20200114155413-6afb5195e5aa // indirect
 	golang.org/x/sys v0.0.0-20200122134326-e047566fdf82 // indirect
 	golang.org/x/tools v0.0.0-20200124200720-1b668f209185 // indirect
-	gopkg.in/yaml.v2 v2.2.8
+	gopkg.in/yaml.v2 v2.2.8 // indirect
 	helm.sh/helm/v3 v3.0.2
 	k8s.io/apimachinery v0.17.1
 	sigs.k8s.io/yaml v1.1.0

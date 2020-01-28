@@ -54,16 +54,17 @@ var (
 			err = objectToTemplate(&myTemplate.Objects, &templates)
 			checkErr(err, "Failed object to template conversion")
 
-			// TODO: Convert myTemplate.Parameters into a yaml string map
+			// Convert myTemplate.Parameters into a yaml string map
 			values := make(map[string]interface{})
 			err = paramsToValues(&myTemplate.Parameters, &values, &templates)
 			checkErr(err, "Failed parameter to value conversion")
 
 			myChart := chart.Chart{
 				Metadata: &chart.Metadata{
-					Name:    myTemplate.ObjectMeta.Name,
-					Version: "v0.0.1",
-					// TODO: add description, labels, etc.
+					Name:        myTemplate.ObjectMeta.Name,
+					Version:     "v0.0.1",
+					Description: myTemplate.ObjectMeta.Annotations["description"],
+					Tags:        myTemplate.ObjectMeta.Annotations["tags"],
 				},
 				Templates: templates,
 				Values:    values,
