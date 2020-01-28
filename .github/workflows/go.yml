@@ -1,5 +1,5 @@
 name: Go
-on: [push]
+on: [push, pull_request]
 jobs:
 
   build:
@@ -19,7 +19,7 @@ jobs:
     - name: Build Utility
       run: |
         make install
-        
+
     - name: Run Tests
       run: |
         https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
