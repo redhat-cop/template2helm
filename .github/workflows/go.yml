@@ -23,4 +23,9 @@ jobs:
     - name: Run Tests
       run: |
         https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        sudo wget -qO- ${OC_BINARY_URL} | sudo tar -xvz -C /bin
+        go get gopkg.in/mikefarah/yq.v2
+
         make test_e2e
+      env:
+        OC_BINARY_URL: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.3.0.tar.gz
