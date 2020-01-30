@@ -25,7 +25,6 @@ jobs:
         ls -l /opt/hostedtoolcache/go/1.13.7/x64/bin
         ls -l $HOME/go/bin
         go version
-        exit 1
         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
         sudo wget -qO- ${OC_BINARY_URL} | sudo tar -xvz -C /bin
         sudo pip install yq
