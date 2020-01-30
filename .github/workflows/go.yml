@@ -18,6 +18,7 @@ jobs:
 
     - name: Run Tests
       run: |
+        make install
         env
         pwd
         ls -l /opt/hostedtoolcache/go/1.13.7/x64/bin
@@ -27,7 +28,6 @@ jobs:
         curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
         sudo wget -qO- ${OC_BINARY_URL} | sudo tar -xvz -C /bin
         sudo pip install yq
-        make install
         make test_e2e
       env:
         OC_BINARY_URL: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.3.0.tar.gz
