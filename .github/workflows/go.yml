@@ -23,8 +23,8 @@ jobs:
     - name: Run Tests
       run: |
         https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-        wget -qO- ${OC_BINARY_URL} | tar -xvz -C /bin
-        wget -qO- ${YQ_BINARY} | mv yq_linux_amd64 /bin/yq
+        sudo wget -qO- ${OC_BINARY_URL} | sudo tar -xvz -C /bin
+        sudo wget -qO- ${YQ_BINARY} | sudo mv yq_linux_amd64 /bin/yq
         make test_e2e
       env:
         OC_BINARY_URL: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.3.0.tar.gz
