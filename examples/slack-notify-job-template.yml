@@ -40,10 +40,12 @@ parameters:
     displayName: "Slack Hooks URL"
     description: "URL with unique identifier for Slack Hooks"
     required: true
+    value: https://slack.com/bschannel
   - name: "MESSAGE"
     displayName: "Job Name"
     description: "Name of the Scheduled Job to Create."
     required: true
+    value: "test message"
   - name: "SCHEDULE"
     displayName: "Cron Schedule"
     description: "Cron Schedule to Execute the Job"
@@ -59,5 +61,3 @@ parameters:
     description: "The number of failed jobs that will be retained"
     value: "5"
     required: true
-labels:
-  template: "cronjob-slack-notify"

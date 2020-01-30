@@ -14,4 +14,4 @@ parameters:
 - description: Name
   displayName: Name
   name: NAMESPACE
-  required: true
+  value: global-netnamespace-template
