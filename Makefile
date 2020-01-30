@@ -81,10 +81,10 @@ clean:
 test: clean dep
 	go test ./...
 
-test_int:
+test_e2e:
 	test/e2e.sh
 
 lint:
 	golangci-lint run
 
-.PHONY: clean release dep install test test_int lint
+.PHONY: clean release dep install test test_e2e lint
