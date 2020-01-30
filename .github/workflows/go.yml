@@ -22,6 +22,8 @@ jobs:
         sudo wget -qO- ${OC_BINARY_URL} | sudo tar -xvz -C /bin
         sudo pip install yq
         make install
+        env
+        pwd
         make test_e2e
       env:
         OC_BINARY_URL: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.3.0.tar.gz
