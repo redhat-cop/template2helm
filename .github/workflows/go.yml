@@ -19,6 +19,7 @@ jobs:
     - name: Run Tests
       run: |
         make install
+        export PATH=$PATH:$HOME/go/bin
         env
         pwd
         ls -l /opt/hostedtoolcache/go/1.13.7/x64/bin
@@ -32,4 +33,3 @@ jobs:
       env:
         OC_BINARY_URL: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.3.0.tar.gz
         YQ_BINARY: https://github.com/mikefarah/yq/releases/download/2.4.1/yq_linux_amd64
-        PATH: $PATH:$HOME/go/bin
