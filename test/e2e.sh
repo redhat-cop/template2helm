@@ -27,6 +27,9 @@ for test in $(find ./examples/ -maxdepth 1 -mindepth 1 -type f); do
   echo
 done
 
+# Clean up test directory
+rm -r /tmp/charts
+
 if [[ $failures > 0 ]]; then
   echo "$failures Tests Failed"
   exit $failures
