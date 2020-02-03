@@ -70,7 +70,7 @@ dep:
 $(EXECUTABLE): dep
 	go build -o "$@" $(BUILD_ARGS)
 
-install:
+install: clean all
 	go install
 
 clean:

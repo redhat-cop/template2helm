@@ -8,9 +8,9 @@ import (
 
 var (
 	rootCmd = &cobra.Command{
-		Use:   "template2chart",
-		Short: "Template2Chart converts an OpenShift Template into a Helm Chart.",
-		Long: `Template2Chart converts an OpenShift Template into a Helm Chart.
+		Use:   "template2helm",
+		Short: "Template2helm converts an OpenShift Template into a Helm Chart.",
+		Long: `Template2helm converts an OpenShift Template into a Helm Chart.
       For more info, check out https://github.com/redhat-cop/template2helm`,
 	}
 )
