@@ -102,6 +102,9 @@ func checkErr(err error, msg string) {
 func objectToTemplate(objects *[]runtime.RawExtension, templateLabels *map[string]string, templates *[]*chart.File) error {
 	o := *objects
 
+	m := make(map[string][]byte)
+	seperator := []byte{'-', '-','-','\n'}
+
 	for _, v := range o {
 		var k8sR unstructured.Unstructured
 		err := json.Unmarshal(v.Raw, &k8sR)
@@ -129,6 +132,15 @@ func objectToTemplate(objects *[]runtime.RawExtension, templateLabels *map[strin
 		data, err := yaml.JSONToYAML(updatedJSON)
 		if err != nil {
 			return fmt.Errorf(fmt.Sprintf("Failed to marshal Raw resource back to YAML\n%v\n", updatedJSON) + err.Error())
+		}
+
+		if m[k8sR.GetKind()] == nil  {
+			m[k8sR.GetKind()] = data
+
+		} else {
+			newdata:=append(m[k8sR.GetKind()],seperator...)
+			data=append(newdata,data...)
+			m[k8sR.GetKind()] = data
 		}
 
 		tf := chart.File{
