@@ -7,20 +7,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+
     - name: Set up Go 1.13
       uses: actions/setup-go@v1
       with:
         go-version: 1.13
       id: go
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v1
-
-    - name: Build Utility
-      run: |
-        make install
-
     - name: Run Tests
       run: |
-        https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-        make test_int
+        make install
+        export PATH=$PATH:$HOME/go/bin
+        env
+        pwd
+        ls -l /opt/hostedtoolcache/go/1.13.7/x64/bin
+        ls -l $HOME/go/bin
+        go version
+        curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+        sudo wget -qO- ${OC_BINARY_URL} | sudo tar -xvz -C /bin
+        sudo pip install yq
+        make test_e2e
+      env:
+        OC_BINARY_URL: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-4.3.0.tar.gz
+        YQ_BINARY: https://github.com/mikefarah/yq/releases/download/2.4.1/yq_linux_amd64

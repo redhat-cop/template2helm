@@ -81,15 +81,10 @@ clean:
 test: clean dep
 	go test ./...
 
-test_int:
-	for test in $(shell find ./examples/ -maxdepth 1 -mindepth 1 -type f); do \
-		echo $$test; template2helm convert --template $$test --chart /tmp/charts || break; \
-	done
-	for chart in $(shell find /tmp/charts -maxdepth 1 -mindepth 1 -type d); do \
-		echo $$chart; helm template $$chart || break; \
-	done
+test_e2e:
+	test/e2e.sh
 
 lint:
 	golangci-lint run
 
-.PHONY: clean release dep install test test_int lint
+.PHONY: clean release dep install test test_e2e lint
