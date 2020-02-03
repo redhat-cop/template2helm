@@ -111,7 +111,6 @@ func objectToTemplate(objects *[]runtime.RawExtension, templateLabels *map[strin
 		if err != nil {
 			return fmt.Errorf(fmt.Sprintf("Failed to unmarshal Raw resource\n%v\n", v.Raw) + err.Error())
 		}
-		name := "templates/" + strings.ToLower(k8sR.GetKind()+".yaml")
 
 		labels := k8sR.GetLabels()
 		if labels == nil {
@@ -128,7 +127,7 @@ func objectToTemplate(objects *[]runtime.RawExtension, templateLabels *map[strin
 			return fmt.Errorf(fmt.Sprintf("Failed to marshal Unstructured record to JSON\n%v\n", k8sR) + err.Error())
 		}
 
-		log.Printf("Creating a template for object %s", name)
+		log.Printf("Creating a template for object %s", k8sR.GetKind())
 		data, err := yaml.JSONToYAML(updatedJSON)
 		if err != nil {
 			return fmt.Errorf(fmt.Sprintf("Failed to marshal Raw resource back to YAML\n%v\n", updatedJSON) + err.Error())
@@ -142,10 +141,16 @@ func objectToTemplate(objects *[]runtime.RawExtension, templateLabels *map[strin
 			data=append(newdata,data...)
 			m[k8sR.GetKind()] = data
 		}
+	}
+
+    // Create chart using map
+	for k, v := range m {
+
+		name := "templates/" + strings.ToLower(k+".yaml")
 
 		tf := chart.File{
 			Name: name,
-			Data: data,
+			Data: v,
 		}
 		*templates = append(*templates, &tf)
 	}
