@@ -51,7 +51,7 @@ var (
 
 			// Convert myTemplate.Objects into individual files
 			var templates []*chart.File
-			err = objectToTemplate(&myTemplate.Objects, &templates)
+			err = objectToTemplate(&myTemplate.Objects, &myTemplate.ObjectLabels, &templates)
 			checkErr(err, "Failed object to template conversion")
 
 			// Convert myTemplate.Parameters into a yaml string map
@@ -99,7 +99,7 @@ func checkErr(err error, msg string) {
 }
 
 // Convert the object list in the openshift template to a set of template files in the chart
-func objectToTemplate(objects *[]runtime.RawExtension, templates *[]*chart.File) error {
+func objectToTemplate(objects *[]runtime.RawExtension, templateLabels *map[string]string, templates *[]*chart.File) error {
 	o := *objects
 
 	for _, v := range o {
@@ -110,11 +110,27 @@ func objectToTemplate(objects *[]runtime.RawExtension, templates *[]*chart.File)
 		}
 		name := "templates/" + strings.ToLower(k8sR.GetKind()+".yaml")
 
-		log.Printf("Creating a template for object %s", name)
-		data, err := yaml.JSONToYAML(v.Raw)
-		if err != nil {
-			return fmt.Errorf(fmt.Sprintf("Failed to marshal Raw resource back to YAML\n%v\n", v.Raw) + err.Error())
+		labels := k8sR.GetLabels()
+		if labels == nil {
+			k8sR.SetLabels(*templateLabels)
+		} else {
+			for key, value := range *templateLabels {
+				labels[key] = value
+			}
+			k8sR.SetLabels(labels)
 		}
+
+		updatedJSON, err := k8sR.MarshalJSON()
+		if err != nil {
+			return fmt.Errorf(fmt.Sprintf("Failed to marshal Unstructured record to JSON\n%v\n", k8sR) + err.Error())
+		}
+
+		log.Printf("Creating a template for object %s", name)
+		data, err := yaml.JSONToYAML(updatedJSON)
+		if err != nil {
+			return fmt.Errorf(fmt.Sprintf("Failed to marshal Raw resource back to YAML\n%v\n", updatedJSON) + err.Error())
+		}
+
 		tf := chart.File{
 			Name: name,
 			Data: data,
