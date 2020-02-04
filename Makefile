@@ -55,8 +55,8 @@ bin/windows/amd64/$(EXECUTABLE).exe:
 # git tag -a v$(RELEASE) -m 'release $(RELEASE)'
 release: clean
 	$(MAKE) $(COMPRESSED_EXECUTABLE_TARGETS)
-	git push && git push --tags
-	git log --format=%B $(LAST_TAG) -1 | \
+	git push && git push -u upstream --tags
+	git log --pretty=format:"- %h %s by %an" --no-merges $(LAST_TAG) -1 | \
 		github-release release -u $(USER) -r $(EXECUTABLE) \
 		-t $(LAST_TAG) -n $(LAST_TAG) -d - || true
 	$(foreach FILE,$(COMPRESSED_EXECUTABLES),$(UPLOAD_CMD);)
@@ -74,14 +74,13 @@ install: clean all
 	go install
 
 clean:
-	rm go-app || true
 	rm $(EXECUTABLE) || true
-	rm -rf bin/
+	rm -rf bin/ || true
 
 test: clean dep
 	go test ./...
 
-test_e2e:
+test_e2e: install
 	test/e2e.sh
 
 lint:
