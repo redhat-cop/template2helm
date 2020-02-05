@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build binaries
+        run: make release
+      - name: Generate Changelog
+        run: git log --pretty=format:"- %h %s by %an" --no-merges $(LAST_TAG) -1 > ${{ github.workflow }}-CHANGELOG.txt
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: ${{ github.workflow }}-CHANGELOG.txt
+          files: |
+            bin/darwin/amd64/template2helm.bz2
+            bin/freebsd/amd64/template2helm.bz2
+            bin/linux/amd64/template2helm.bz2
+            bin/windows/amd64/template2helm.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

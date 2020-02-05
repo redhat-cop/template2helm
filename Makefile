@@ -52,14 +52,17 @@ bin/windows/amd64/$(EXECUTABLE).exe:
 %.zip: %.exe
 	zip "$@" "$<"
 
+release_targets:
+	$(foreach FILE,$(COMPRESSED_EXECUTABLES),$(info ${FILE}))
+
 # git tag -a v$(RELEASE) -m 'release $(RELEASE)'
 release: clean
 	$(MAKE) $(COMPRESSED_EXECUTABLE_TARGETS)
-	git push && git push -u upstream --tags
-	git log --pretty=format:"- %h %s by %an" --no-merges $(LAST_TAG) -1 | \
-		github-release release -u $(USER) -r $(EXECUTABLE) \
-		-t $(LAST_TAG) -n $(LAST_TAG) -d - || true
-	$(foreach FILE,$(COMPRESSED_EXECUTABLES),$(UPLOAD_CMD);)
+	#git push && git push -u upstream --tags
+	#git log --pretty=format:"- %h %s by %an" --no-merges $(LAST_TAG) -1 | \
+		#github-release release -u $(USER) -r $(EXECUTABLE) \
+		#-t $(LAST_TAG) -n $(LAST_TAG) -d - || true
+	#$(foreach FILE,$(COMPRESSED_EXECUTABLES),$(UPLOAD_CMD);)
 
 # install and/or update all dependencies, run this from the project directory
 # go get -u ./...
@@ -86,4 +89,4 @@ test_e2e: install
 lint:
 	golangci-lint run
 
-.PHONY: clean release dep install test test_e2e lint
+.PHONY: clean release release_targets dep install test test_e2e lint
