@@ -50,6 +50,9 @@ bin/windows-amd64-$(EXECUTABLE).exe:
 %.zip: %.exe
 	zip "$@" "$<"
 
+release_targets:
+	$(foreach FILE,$(COMPRESSED_EXECUTABLES),$(info ${FILE}))
+
 # git tag -a v$(RELEASE) -m 'release $(RELEASE)'
 release: clean
 	$(MAKE) $(COMPRESSED_EXECUTABLE_TARGETS)
@@ -76,4 +79,4 @@ test_e2e: install
 lint:
 	golangci-lint run
 
-.PHONY: clean release dep install test test_e2e lint
+.PHONY: clean release release_targets dep install test test_e2e lint
