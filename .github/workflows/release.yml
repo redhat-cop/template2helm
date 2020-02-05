@@ -22,7 +22,7 @@ jobs:
           else
             REV_RANGE=${PREVIOUS_TAG}..${LATEST_TAG}
           fi
-          git log --pretty=format:"- %h %s by %an" --no-merges ${PREVIOUS_TAG}..${LATEST_TAG} > ${{ github.workflow }}-CHANGELOG.txt
+          git log --pretty=format:"- %h %s by %an" --no-merges ${REV_RANGE} > ${{ github.workflow }}-CHANGELOG.txt
           cat ${{ github.workflow }}-CHANGELOG.txt
       - name: Create Release
         uses: softprops/action-gh-release@v1
