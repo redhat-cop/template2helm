@@ -14,7 +14,15 @@ jobs:
       - name: Build binaries
         run: make release
       - name: Generate Changelog
-        run: git log --pretty=format:"- %h %s by %an" --no-merges $(LAST_TAG) -1 > ${{ github.workflow }}-CHANGELOG.txt
+        run: |
+          LATEST_TAG=$(git tag --sort=creatordate | sed '$!d')
+          PREVIOUS_TAG=$(git tag --sort=creatordate | sed 'x;$!d')
+          if [ -z "${PREVIOUS_TAG}" ]; then
+            REV_RANGE=${LATEST_TAG}
+          else
+            REV_RANGE=${PREVIOUS_TAG}..${LATEST_TAG}
+          fi
+          git log --pretty=format:"- %h %s by %an" --no-merges ${PREVIOUS_TAG}..${LATEST_TAG} > ${{ github.workflow }}-CHANGELOG.txt
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
