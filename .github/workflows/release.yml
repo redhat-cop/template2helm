@@ -29,9 +29,9 @@ jobs:
         with:
           body_path: ${{ github.workflow }}-CHANGELOG.txt
           files: |
-            bin/darwin/amd64/template2helm.bz2
-            bin/freebsd/amd64/template2helm.bz2
-            bin/linux/amd64/template2helm.bz2
-            bin/windows/amd64/template2helm.zip
+            bin/darwin-amd64-template2helm.bz2
+            bin/freebsd-amd64-template2helm.bz2
+            bin/linux-amd64-template2helm.bz2
+            bin/windows-amd64-template2helm.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
