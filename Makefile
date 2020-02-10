@@ -15,8 +15,6 @@ WIN_EXECUTABLES := \
 COMPRESSED_EXECUTABLES=$(UNIX_EXECUTABLES:%=%.bz2) $(WIN_EXECUTABLES:%.exe=%.zip)
 COMPRESSED_EXECUTABLE_TARGETS=$(COMPRESSED_EXECUTABLES:%=bin/%)
 
-#UPLOAD_CMD = github-release upload -u $(USER) -r $(EXECUTABLE) -t $(LAST_TAG) -n $(subst /,-,$(FILE)) -f bin/$(FILE)
-
 BUILD_ARGS = -ldflags "-X github.com/$(USER)/$(EXECUTABLE)/cmd.version=$(LAST_TAG)"
 
 all: $(EXECUTABLE)
@@ -58,15 +56,7 @@ release_targets:
 # git tag -a v$(RELEASE) -m 'release $(RELEASE)'
 release: clean
 	$(MAKE) $(COMPRESSED_EXECUTABLE_TARGETS)
-	#git push && git push -u upstream --tags
-	#git log --pretty=format:"- %h %s by %an" --no-merges $(LAST_TAG) -1 | \
-		#github-release release -u $(USER) -r $(EXECUTABLE) \
-		#-t $(LAST_TAG) -n $(LAST_TAG) -d - || true
-	#$(foreach FILE,$(COMPRESSED_EXECUTABLES),$(UPLOAD_CMD);)
 
-# install and/or update all dependencies, run this from the project directory
-# go get -u ./...
-# go test -i ./
 dep:
 	go mod vendor
 
