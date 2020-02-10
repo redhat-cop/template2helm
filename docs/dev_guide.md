@@ -43,7 +43,7 @@ $ make test_e2e
 
 ## Cutting Releases
 
-We use a [GitHub Actions workflow](.github/workflows/release.yml) to automate creating releases of our project. It triggers by creating and pushing a new tag to the main repo that uses semantic versioning.
+We use a [GitHub Actions workflow](.github/workflows/release.yml) to automate creating releases of our project. It triggers by creating and pushing a new tag to the main repo that uses [semantic versioning](https://semver.org/).
 
 ```
 # Create a new tag for the release
