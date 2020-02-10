@@ -76,4 +76,4 @@ test_e2e: install
 lint:
 	golangci-lint run
 
-.PHONY: clean release release_targets dep install test test_e2e lint
+.PHONY: clean release dep install test test_e2e lint
