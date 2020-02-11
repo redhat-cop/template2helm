@@ -6,8 +6,7 @@ EXECUTABLE := template2helm
 # only include the amd64 binaries, otherwise the github release will become
 # too big
 UNIX_EXECUTABLES := \
-	darwin-amd64-$(EXECUTABLE) \
-	freebsd-amd64-$(EXECUTABLE) \
+	mac-amd64-$(EXECUTABLE) \
 	linux-amd64-$(EXECUTABLE)
 WIN_EXECUTABLES := \
 	windows-amd64-$(EXECUTABLE).exe
