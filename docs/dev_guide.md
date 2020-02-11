@@ -43,12 +43,12 @@ $ make test_e2e
 
 ## Cutting Releases
 
-We use the [github-release](https://github.com/aktau/github-release) utility to automate creating releases of our project. In order to cut a release, a repository admin must first generate a [GitHub API token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line). Then run the following:
+We use a [GitHub Actions workflow](.github/workflows/release.yml) to automate creating releases of our project. It triggers by creating and pushing a new tag to the main repo that uses [semantic versioning](https://semver.org/).
 
 ```
 # Create a new tag for the release
 git tag -a <version> -m "Release <version>"
-export GITHUB_TOKEN=...
-go get github.com/aktau/github-release
-make release
+git push -u upstream <version>
 ```
+
+It also requires the creation of a secret called `GITHUB_TOKEN` in the repo being used to do the releases. The value of this secret should be a [GitHub API Token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line).
