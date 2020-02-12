@@ -35,8 +35,7 @@ jobs:
           name: Release ${{ steps.get_version.outputs.VERSION }}
           body_path: ${{ github.workflow }}-CHANGELOG.txt
           files: |
-            bin/darwin-amd64-template2helm.bz2
-            bin/freebsd-amd64-template2helm.bz2
+            bin/mac-amd64-template2helm.bz2
             bin/linux-amd64-template2helm.bz2
             bin/windows-amd64-template2helm.zip
         env:

@@ -6,8 +6,7 @@ EXECUTABLE := template2helm
 # only include the amd64 binaries, otherwise the github release will become
 # too big
 UNIX_EXECUTABLES := \
-	darwin-amd64-$(EXECUTABLE) \
-	freebsd-amd64-$(EXECUTABLE) \
+	mac-amd64-$(EXECUTABLE) \
 	linux-amd64-$(EXECUTABLE)
 WIN_EXECUTABLES := \
 	windows-amd64-$(EXECUTABLE).exe
@@ -34,9 +33,7 @@ all: $(EXECUTABLE)
 #	GOARCH=386 GOOS=windows go build -o "$@" $(BUILD_ARGS)
 
 # amd64
-bin/freebsd-amd64-$(EXECUTABLE):
-	GOARCH=amd64 GOOS=freebsd go build -o "$@" $(BUILD_ARGS)
-bin/darwin-amd64-$(EXECUTABLE):
+bin/mac-amd64-$(EXECUTABLE):
 	GOARCH=amd64 GOOS=darwin go build -o "$@" $(BUILD_ARGS)
 bin/linux-amd64-$(EXECUTABLE):
 	GOARCH=amd64 GOOS=linux go build -o "$@" $(BUILD_ARGS)
