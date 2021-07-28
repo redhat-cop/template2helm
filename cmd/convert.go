@@ -59,6 +59,9 @@ var (
 			err = paramsToValues(&myTemplate.Parameters, &values, &templates)
 			checkErr(err, "Failed parameter to value conversion")
 
+            valuesAsByte, err := yaml.Marshal(values)
+            checkErr(err, "Failed converting values to YAML")
+
 			myChart := chart.Chart{
 				Metadata: &chart.Metadata{
 					Name:        myTemplate.ObjectMeta.Name,
@@ -68,6 +71,7 @@ var (
 				},
 				Templates: templates,
 				Values:    values,
+				Raw:       []*chart.File{{ Name: "values.yaml", Data: []byte(valuesAsByte) }},
 			}
 
 			if myChart.Metadata.Name == "" {
