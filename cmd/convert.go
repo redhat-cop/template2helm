@@ -59,8 +59,8 @@ var (
 			err = paramsToValues(&myTemplate.Parameters, &values, &templates)
 			checkErr(err, "Failed parameter to value conversion")
 
-            valuesAsByte, err := yaml.Marshal(values)
-            checkErr(err, "Failed converting values to YAML")
+			valuesAsByte, err := yaml.Marshal(values)
+			checkErr(err, "Failed converting values to YAML")
 
 			myChart := chart.Chart{
 				Metadata: &chart.Metadata{
