@@ -1,3 +1,5 @@
 vendor/
 bin/
 template2helm
+
+.idea/
