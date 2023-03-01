@@ -10,14 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
       - run: |
           git fetch --prune --unshallow
       - name: Build binaries
         run: make release
+
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
       - name: Generate Changelog
         run: |
           LATEST_TAG=$(git tag --sort=creatordate | sed '$!d')
@@ -29,6 +32,7 @@ jobs:
           fi
           git log --pretty=format:"- %h %s by %an" --no-merges ${REV_RANGE} > ${{ github.workflow }}-CHANGELOG.txt
           cat ${{ github.workflow }}-CHANGELOG.txt
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
