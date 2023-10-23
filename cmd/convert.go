@@ -11,6 +11,7 @@ import (
 
 	template "github.com/openshift/api/template/v1"
 	"github.com/spf13/cobra"
+	"github.com/stoewer/go-strcase"
 	"helm.sh/helm/v3/pkg/chart"
 	"helm.sh/helm/v3/pkg/chartutil"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -147,7 +148,7 @@ func objectToTemplate(objects *[]runtime.RawExtension, templateLabels *map[strin
 		}
 	}
 
-    // Create chart using map
+	// Create chart using map
 	for k, v := range m {
 
 		name := "templates/" + strings.ToLower(k+".yaml")
@@ -169,7 +170,7 @@ func paramsToValues(param *[]template.Parameter, values *map[string]interface{},
 	v := *values
 
 	for _, pm := range p {
-		name := strings.ToLower(pm.Name)
+		name := strcase.LowerCamelCase(pm.Name)
 		log.Printf("Convert parameter %s to value .%s", pm.Name, name)
 
 		for i, tf := range t {
